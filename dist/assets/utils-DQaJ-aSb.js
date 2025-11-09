@@ -1,0 +1,1 @@
+const a=(e,r)=>Math.random()*(r-e)+e;function n(e){var r=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(e);return r?{r:parseInt(r[1],16),g:parseInt(r[2],16),b:parseInt(r[3],16)}:null}export{n as h,a as r};

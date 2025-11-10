@@ -55,7 +55,7 @@ import {
 
   app.stage.addChild(ring);
 
-  const bg = Sprite.from('../../../public/img/filter.jpg');
+  const bg = Sprite.from('../img/filter.jpg');
 
   bg.width = app.screen.width;
   bg.height = app.screen.height;

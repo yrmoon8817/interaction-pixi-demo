@@ -10,7 +10,7 @@ export default async function example(){
   });
   app.canvas.id = 'app-canvas';
   document.querySelector('.page').appendChild(app.canvas);
-  const texture= await Assets.load('/img/wave1.jpg');
+  const texture= await Assets.load('../img/wave1.jpg');
   const plane = new MeshPlane({
     texture,
     verticesX: 10,

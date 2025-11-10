@@ -13,7 +13,7 @@ export default async function example() {
   app.canvas.id = "app-canvas";
   document.querySelector(".page").appendChild(app.canvas);
 
-  const texture = await Assets.load("/img/wave2.png");
+  const texture = await Assets.load("../img/wave2.png");
 
   // --- 메쉬 플레인 ---
   const plane = new MeshPlane({

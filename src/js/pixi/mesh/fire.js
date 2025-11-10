@@ -28,7 +28,7 @@ import noiseFragment from '../../../noise2.frag';  // 유지
   // ───────────────────────────────────────────────
   // 2. 지도 이미지 로드
   // ───────────────────────────────────────────────
-  const mapTexture = await Assets.load('../../../public/img/map.jpg');
+  const mapTexture = await Assets.load('../img/map.jpg');
   const mapSprite = new Sprite(mapTexture);
   mapSprite.anchor.set(0.5);
   mapSprite.position.set(app.screen.width / 2, app.screen.height / 2);

@@ -122,13 +122,12 @@ async function run() {
 
   // RenderTexture로 픽셀 데이터 추출
   // 그 이미지의 픽셀을 분석해서 파티클 생성위치(윤곽선)로 사용
-  const rt = RenderTexture.create({ width: text.width, height: text.height });
-  text.position.set(text.width / 2, text.height / 2);
+  const rt = RenderTexture.create({ width: text.width - 10, height: text.height * 0.7});
   app.renderer.render({ container: text, target: rt, clear: true });
   text.position.set(center.x, center.y);
   const pixels = app.renderer.extract.pixels(rt);
   const gw = rt.width;
-  const gh = rt.height - 30;
+  const gh = rt.height;
 
   // 파티클 레이어
   const particlesLayer = new Container();
@@ -150,31 +149,39 @@ async function run() {
     blurFilter.blur = p * 10;
 
     // 파티클 생성 > 시간이 갈수록 증가시키기
-    if (spawnEnabled && elapsed < DURATION) {
-      const spawnTrials = Math.floor((60 + 180 * p) * 10);
-      // 랜덤 좌표를 뽑고, 글자 윤곽선인지 검사
-      for (let i = 0; i < spawnTrials; i++) {
-        const x = Math.floor(Math.random() * gw);
-        const y = Math.floor(Math.random() * gh);
-        if (!isEdge(pixels, gw, gh, x, y, 128)) continue;
-        // 좌표를 안쪽으로 계산
-        if (Math.random() < 0.5 + 0.4 * p) {
-          const dx = x - gw / 2;
-          const dy = y - gh / 2;
-          const len = Math.hypot(dx, dy) || 1;
-          const ux = dx / len;
-          const uy = dy / len;
-          const inward = rand(15, 40);
-          const px = center.x + (dx - ux * inward);
-          const py = center.y + (dy - uy * inward);
-          // 계산된 위치에 새 파티클을 만들고, 화면과 배열에 추가
-          const par = new Particle(px, py);
-          particlesLayer.addChild(par.g);
-          particles.push(par);
-        }
-      }
-    }
+if (spawnEnabled && elapsed < DURATION) {
 
+  let spawnTrials = 0;
+
+  if (elapsed < 5000) {
+    spawnTrials = 70; 
+  }
+
+  for (let i = 0; i < spawnTrials; i++) {
+    const x = Math.floor(Math.random() * gw);
+    const y = Math.floor(Math.random() * gh);
+
+    // 🔥 윤곽선 대신 "글자 내부 영역" 판정
+    const idx = (y * gw + x) * 4;
+    const alpha = pixels[idx + 3];
+    if (alpha <= 10) continue;   // (투명한 영역은 제외 = 글자 영역만 사용)
+
+    // 텍스트 내부의 좌표 → 화면 좌표로 변환하는 부분은 동일
+    const dx = x - gw / 2;
+    const dy = y - gh / 1.6;
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len;
+    const uy = dy / len;
+    const inward = rand(-10, -10);
+
+    const px = center.x + (dx - ux * inward);
+    const py = center.y + (dy - uy * inward);
+
+    const par = new Particle(px, py);
+    particlesLayer.addChild(par.g);
+    particles.push(par);
+  }
+}
     // 파티클 업데이트 및 사라진 파티클 제거
     for (const ptt of particles) ptt.update();
     for (let i = particles.length - 1; i >= 0; i--) {
@@ -186,10 +193,10 @@ async function run() {
     }
 
     // 5초 후 새 파티클 생성 중지 및 기존 파티클 1초후 사라짐 처리
-    if (elapsed >= DURATION && elapsed < DURATION + EXTRA) {
+    if (elapsed >= 5000 && elapsed < 5100) {
       spawnEnabled = false;
       for (const ptt of particles) {
-        ptt.g.alpha -= 0.08;
+        ptt.g.alpha =0;
         if (ptt.g.alpha < 0) ptt.g.alpha = 0;
       }
     }

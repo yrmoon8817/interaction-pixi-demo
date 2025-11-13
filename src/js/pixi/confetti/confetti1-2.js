@@ -26,8 +26,8 @@ async function initApp(){
   app.ticker.add(()=>{
     // 프레임 작동: delta는 프레임 간격 보정값
     // 매 프레임마다 confetti 호출(예시)
-    confetti({x:0, y:0.5, count:60, degree: -50});
-    confetti({x:1, y:0.5, count:60, degree: -130});
+    confetti({x:0, y:0.5, count:70, degree: -50});
+    confetti({x:1, y:0.5, count:70, degree: -130});
 
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];

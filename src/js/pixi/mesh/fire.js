@@ -85,7 +85,13 @@ const geometry = new Geometry({
   noiseMaskSprite.position.set(app.screen.width / 2, app.screen.height / 2);
   app.stage.addChild(noiseMaskSprite);
   mapSprite.mask = noiseMaskSprite;
-
+// 🔥 추가: 초기 limit=0 상태로 먼저 렌더링
+noiseQuad.shader.resources.noiseUniforms.uniforms.limit = 0.0;
+app.renderer.render({
+  container: noiseQuad,
+  target: noiseTexture,
+  clear: true,
+});
   // ───────────────────────────────────────────────
   // 7. 애니메이션 루프
   // ───────────────────────────────────────────────

@@ -37,7 +37,7 @@ export default class Particle{
         this.x += this.vx;
         this.y += this.vy;
         
-        this.opacity -= 0.005;
+        this.opacity -= 0.007;
         // 요소의 제자리 회전
         this.widthDelta +=2;
         this.heightDelta+=2;

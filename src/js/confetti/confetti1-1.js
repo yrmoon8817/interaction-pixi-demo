@@ -37,14 +37,14 @@ function render(){
 		confetti({
     	x : 0,
     	y : 0.5,
-    	count:60,
+    	count:70,
     	degree:-50
   	});
     
 		confetti({
     	x : 1,
     	y : 0.5,
-    	count:60,
+    	count:70,
     	degree:-130
   	})
 

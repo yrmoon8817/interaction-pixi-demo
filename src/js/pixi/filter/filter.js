@@ -20,7 +20,7 @@ import {
   await Assets.load([
     'https://pixijs.com/assets/pixi-filters/displace.png',
     'https://pixijs.com/assets/pixi-filters/ring.png',
-    '../../../public/img/filter.jpg',
+    '../img/filter.jpg',
   ]);
 
   app.stage.eventMode = 'static';

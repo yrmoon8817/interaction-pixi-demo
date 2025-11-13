@@ -31,8 +31,8 @@ async function initApp() {
 
   app.ticker.add(() => {
     // 테스트용 계속 뿌리기
-    confetti({ x: 0, y: 0.5, count: 60, degree: -50 });
-    confetti({ x: 1, y: 0.5, count: 60, degree: -130 });
+    confetti({ x: 0, y: 0.5, count: 70, degree: -50 });
+    confetti({ x: 1, y: 0.5, count: 70, degree: -130 });
 
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];

@@ -17,9 +17,9 @@ export default async function example(){
     verticesY: 10,
   });
   plane.width = 700;
-  plane.height = 350;
-  plane.x = 0;
-  plane.y = 0;
+  plane.height = 320;
+  plane.x = 30;
+  plane.y = 30;
   app.stage.addChild(plane);
 
   const {buffer} = plane.geometry.getAttribute('aPosition');

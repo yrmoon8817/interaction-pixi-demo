@@ -1,3 +1,4 @@
+
 import {
   Application,
   Assets,
@@ -8,17 +9,18 @@ import {
   Sprite,
 } from 'pixi.js';
 
-import vertexShader from '../../../multipassMesh.vert'; // 변경: 이름 변경으로 중복 방지
-import noiseFragment from '../../../noise2.frag';  // 유지
+import vertexShader from '../../../multipassMesh.vert';
+import noiseFragment from '../../../noise2.frag';
 
 (async () => {
   // ───────────────────────────────────────────────
-  // 1. PIXI 애플리케이션 초기화
+  // 1. PIXI 앱 초기화
   // ───────────────────────────────────────────────
   const app = new Application();
   await app.init({
     resizeTo: window,
     preference: 'webgl',
+    resizeTo:window,
     resolution: window.devicePixelRatio || 1,
     autoDensity: true,
   });
@@ -35,34 +37,34 @@ import noiseFragment from '../../../noise2.frag';  // 유지
   mapSprite.width = 1920;
   mapSprite.height = 1080;
   app.stage.addChild(mapSprite);
+  mapSprite.visible = false; // 🔥 초기 숨김
+  // ───────────────────────────────────────────────
+  // 3. Geometry 설정
+  // ───────────────────────────────────────────────
+  const geometry = new Geometry({
+    attributes: {
+      aPosition: [
+        0, 0,
+        1920, 0,
+        1920, 1080,
+        0, 1080,
+      ],
+      aUV: [0, 0, 1, 0, 1, 1, 0, 1],
+    },
+    indexBuffer: [0, 1, 2, 0, 2, 3],
+  });
 
   // ───────────────────────────────────────────────
-  // 3. Geometry 설정 (aUV → aTextureCoord로 변경)
-  // ───────────────────────────────────────────────
-const geometry = new Geometry({
-  attributes: {
-    aPosition: [
-      0, 0,
-      1920, 0,
-      1920, 1080,
-      0, 1080,
-    ],
-    aUV: [0, 0, 1, 0, 1, 1, 0, 1], // ✅ 셰이더와 일치하도록 수정
-  },
-  indexBuffer: [0, 1, 2, 0, 2, 3],
-});
-
-  // ───────────────────────────────────────────────
-  // 4. 퍼린 노이즈 텍스처 로드
+  // 4. 노이즈 텍스처 로드
   // ───────────────────────────────────────────────
   const perlinTexture = await Assets.load('https://pixijs.com/assets/perlin.jpg');
 
   // ───────────────────────────────────────────────
-  // 5. 노이즈 셰이더 생성
+  // 5. 노이즈 셰이더
   // ───────────────────────────────────────────────
   const noiseShader = Shader.from({
     gl: {
-      vertex: vertexShader, // 변경: import 된 이름 사용
+      vertex: vertexShader,
       fragment: noiseFragment,
     },
     resources: {
@@ -74,7 +76,7 @@ const geometry = new Geometry({
   });
 
   // ───────────────────────────────────────────────
-  // 6. 노이즈 메쉬 + 렌더텍스처 + 마스크 구성
+  // 6. Mesh + RenderTexture 구성
   // ───────────────────────────────────────────────
   const noiseTexture = RenderTexture.create({ width: 1920, height: 1080 });
   const noiseQuad = new Mesh({ geometry, shader: noiseShader });
@@ -84,33 +86,39 @@ const geometry = new Geometry({
   noiseMaskSprite.anchor.set(0.5);
   noiseMaskSprite.position.set(app.screen.width / 2, app.screen.height / 2);
   app.stage.addChild(noiseMaskSprite);
+
+  // 지도에 마스크 적용
   mapSprite.mask = noiseMaskSprite;
-// 🔥 추가: 초기 limit=0 상태로 먼저 렌더링
-noiseQuad.shader.resources.noiseUniforms.uniforms.limit = 0.0;
-app.renderer.render({
-  container: noiseQuad,
-  target: noiseTexture,
-  clear: true,
-});
-  // ───────────────────────────────────────────────
-  // 7. 애니메이션 루프
-  // ───────────────────────────────────────────────
-  const startTime = performance.now();
-  const duration = 10000;
-  app.ticker.add(() => {
-    const elapsed = performance.now() - startTime;
-    const progress = Math.min(elapsed / duration, 1);
 
-    noiseQuad.shader.resources.noiseUniforms.uniforms.limit = progress;
+  // 처음 한 번 렌더링
+  app.renderer.render({
+    container: noiseQuad,
+    target: noiseTexture,
+    clear: true,
+  });
 
+  // ───────────────────────────────────────────────
+  // 7. 반복 애니메이션
+  // ───────────────────────────────────────────────
+  let limit = 0;
+  let direction = 1; // 1: 지도 드러남, -1: 다시 검은 덩어리
+
+  app.ticker.add((ticker) => {
+    limit += 0.004 * direction * ticker.deltaTime; // 속도 조절 가능
+
+    // 값 왕복
+    if (limit >= 1) direction = -1;
+    if (limit <= 0) direction = 1;
+
+    // 셰이더에 전달
+    noiseQuad.shader.resources.noiseUniforms.uniforms.limit = limit;
+
+    // 새로 렌더링
     app.renderer.render({
       container: noiseQuad,
       target: noiseTexture,
       clear: true,
     });
-    if (progress >= 1.0) {
-      app.ticker.stop()
-    };
+    mapSprite.visible = true; // 🔥 이제 표시
   });
 })();
-

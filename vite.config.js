@@ -17,7 +17,6 @@ export default defineConfig({
         page14: resolve(__dirname, 'pages/00_05_02_confetti.html'),
         page6: resolve(__dirname, 'pages/00_06_wave1.html'),
         page7: resolve(__dirname, 'pages/00_07_wave2.html'),
-        page10: resolve(__dirname, 'pages/00_08_wave3.html'),
         page11: resolve(__dirname, 'pages/00_09_text1.html'),
         page12: resolve(__dirname, 'pages/00_10_mesh.html'),
         page13: resolve(__dirname, 'pages/00_11_filter.html'),

@@ -1,4 +1,4 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";import{A as f,h as s,G as v,S as h}from"./index-DMlA-7KB.js";import{A as m}from"./Assets-B0sgpiA6.js";import{R as g}from"./RenderTexture-BtxiRFfi.js";import{M as w}from"./Mesh-BsXIzAGZ.js";import"./BitmapFontManager-nSsJS9kO.js";import"./CanvasTextMetrics-dG2MPPsY.js";import"./CanvasPool-DEABi7nk.js";import"./State-3sV0XrC-.js";import"./MeshGeometry-CPXfurOR.js";var x=`precision mediump float;
+import"./modulepreload-polyfill-B5Qt9EMX.js";import{A as f,j as s,G as v,S as h}from"./index-C9klQOEH.js";import{A as m}from"./Assets-BoX6RB7d.js";import{R as g}from"./RenderTexture-A9XCA7l0.js";import{M as w}from"./Mesh-DnbGmUJp.js";import"./BitmapFontManager-BRuJYlAf.js";import"./getCanvasFillStyle-DjPYqI5B.js";import"./CanvasPool-C6-OnmGf.js";import"./State-3sV0XrC-.js";import"./MeshGeometry-BrPBMgrR.js";var x=`precision mediump float;
 
 attribute vec2 aPosition;\r
 attribute vec2 aUV;
